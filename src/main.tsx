@@ -8,7 +8,7 @@ import {Provider} from "react-redux";
 import App from "./App.tsx";
 import "./i18n";
 import "./styles/main.scss";
-import {initializeFirebase} from "./utils/firebase.ts";
+import {initializeFirebase} from "./utils/firebase";
 
 initializeFirebase();
 
