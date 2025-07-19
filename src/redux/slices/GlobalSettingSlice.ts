@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 
 const GlobalSettingSlice = createSlice({
   name: "settings",
@@ -12,5 +12,5 @@ const GlobalSettingSlice = createSlice({
   },
 });
 
-export const { changeLanguage } = GlobalSettingSlice.actions;
+export const {changeLanguage} = GlobalSettingSlice.actions;
 export default GlobalSettingSlice.reducer;

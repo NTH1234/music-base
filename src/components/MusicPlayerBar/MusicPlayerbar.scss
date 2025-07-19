@@ -1,0 +1,143 @@
+.music-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: #181818;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-family: "Segoe UI", sans-serif;
+  z-index: 1000;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
+
+  .music-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      margin-right: 12px;
+    }
+
+    .info {
+      .title {
+        font-weight: bold;
+        font-size: 14px;
+      }
+      .artist {
+        font-size: 12px;
+        color: #aaa;
+      }
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: 16px;
+
+      .mv {
+        background: #333;
+        color: #f3ba2f;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+
+      svg {
+        cursor: pointer;
+        font-size: 16px;
+        color: #ccc;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .music-center {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      svg {
+        font-size: 18px;
+        cursor: pointer;
+
+        &:hover {
+          color: #ff472d;
+        }
+      }
+
+      .play-btn {
+        background: #ff472d;
+        color: white;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+      font-size: 12px;
+      margin-top: 5px;
+
+      .bar {
+        flex: 1;
+        height: 4px;
+        background: #444;
+        border-radius: 2px;
+        cursor: pointer;
+
+        .played {
+          height: 100%;
+          background: #ff472d;
+          width: 0%;
+          transition: width 0.2s ease;
+        }
+      }
+    }
+  }
+
+  .music-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: flex-end;
+    flex: 1;
+
+    svg {
+      font-size: 16px;
+      cursor: pointer;
+      color: #ccc;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+}

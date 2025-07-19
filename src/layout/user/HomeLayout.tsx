@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "../../styles/style.scss";
 import "../../styles/global.scss";
 import HomeIcon from "@mui/icons-material/Home";
@@ -8,28 +8,24 @@ import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 const navItems = [
-  { text: "Trang chủ", icon: <HomeIcon /> },
-  { text: "Bảng xếp hạng", icon: <ListIcon /> },
-  { text: "Chủ đề và thể loại", icon: <CategoryIcon /> },
+  {text: "Trang chủ", icon: <HomeIcon />},
+  {text: "Bảng xếp hạng", icon: <ListIcon />},
+  {text: "Chủ đề và thể loại", icon: <CategoryIcon />},
   {
     text: "Thư viện",
     icon: <LibraryMusicIcon />,
-    children: [
-      "Danh sách yêu thích",
-      "Nghe gần đây",
-      "Playlist của tôi"
-    ]
+    children: ["Danh sách yêu thích", "Nghe gần đây", "Playlist của tôi"],
   },
-  { text: "Cài đặt", icon: <SettingsIcon />}
+  {text: "Cài đặt", icon: <SettingsIcon />},
 ];
 
 const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showSubMenu, setShowSubMenu] = useState(false);
 
-  const toggleSubMenu=()=>{
+  const toggleSubMenu = () => {
     setShowSubMenu(!showSubMenu);
-  }
+  };
 
   return (
     <aside className="sidebar">
@@ -43,17 +39,17 @@ const Sidebar = () => {
             <li
               className={`nav-item${activeIndex === idx ? " active" : ""}`}
               key={item.text}
-              onClick={() =>{ setActiveIndex(idx)
-              if(item.children){
-                toggleSubMenu();
-              }
-              }
-              }
+              onClick={() => {
+                setActiveIndex(idx);
+                if (item.children) {
+                  toggleSubMenu();
+                }
+              }}
             >
               <span className="nav-icon">{item.icon}</span>
               <span className="nav-text">{item.text}</span>
             </li>
-            { item.children && showSubMenu && (
+            {item.children && showSubMenu && (
               <ul className="sub-menu">
                 {item.children.map((child) => (
                   <li className="sub-menu-item" key={child}>
@@ -82,8 +78,11 @@ const Header = () => (
   </header>
 );
 
-const HomeLayout = ({ children }: { children: React.ReactNode }) => (
-  <div className="main-gradient-bg" style={{ display: "flex", minHeight: "100vh", width: "100vw"}}>
+const HomeLayout = ({children}: {children: React.ReactNode}) => (
+  <div
+    className="main-gradient-bg"
+    style={{display: "flex", minHeight: "100vh", width: "100vw"}}
+  >
     <Sidebar />
     <div className="layout-content">
       <Header />

@@ -1,3 +1,3 @@
 export const initializeFirebase = () => {
-    // Your Firebase initialization code
+  // Your Firebase initialization code
 };

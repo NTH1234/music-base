@@ -31,13 +31,9 @@ const LANGUAGE = {
 };
 
 // FIREBASE
-const FIREBASE_DEV = {
+const FIREBASE_DEV = {};
 
-};
-
-const FIREBASE = {
-
-};
+const FIREBASE = {};
 
 export default {
   STORE_NAME,
