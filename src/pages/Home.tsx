@@ -2,135 +2,12 @@ import "../styles/style.scss";
 import "../styles/global.scss";
 import {useEffect, useRef, useState} from "react";
 import MusicPlayerBar from "../components/MusicPlayerBar/MusicPlayerBar";
+import { getRecommendedSongs, Song } from "../api/Songs";
+import { getTop100Playlists, Album } from "../api/Playlists";
+import { getFavoriteArtists, Artist } from "../api/Artist";
 // import { SimCard } from "@mui/icons-material";
 
-const Songs = [
-  {
-    id: 1,
-    title: "Sai từ đầu",
-    artist: "Giang Hồng Ngọc, Ali Hoàng Dương",
-    image: "/image/background_login.png",
-    audio: "/mp3/song1.mp3",
-  },
-  {
-    id: 2,
-    title: "Chúng ta của hiện tại",
-    artist: "Sơn Tùng - MTP",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-  },
-  {
-    id: 3,
-    title: "Nhân Sinh Quán",
-    artist: "Út nhị Mino",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-  {
-    id: 4,
-    title: "Mưa rơi vào phòng",
-    artist: "Khởi My",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-  },
-  {
-    id: 5,
-    title: "Mưa rơi vào phòng",
-    artist: "Khởi My",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-  {
-    id: 6,
-    title: "Mưa rơi vào phòng",
-    artist: "Khởi My",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-  {
-    id: 7,
-    title: "Mưa rơi vào phòng",
-    artist: "Khởi My",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-  {
-    id: 8,
-    title: "Mưa rơi vào phòng",
-    artist: "Khởi My",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-  {
-    id: 9,
-    title: "Mưa rơi vào phòng",
-    artist: "Khởi My",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-];
 
-const Top100 = [
-  {
-    id: 1,
-    title: "Nhạc Phim",
-    artist: "Lưu Vũ Ninh",
-    image: "/image/background_login.png",
-    audio: "/mp3/song1.mp3",
-  },
-  {
-    id: 2,
-    title: "Top100Today",
-    artist: "Ali Hoàng Dương",
-    image: "/image/background_login.png",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-];
-
-const fakeArtists = [
-  {
-    id: 1,
-    name: "Sơn Tùng M-TP",
-    songNumber: 9,
-    favorite: 18,
-    image: "/image/son-tung.jpg",
-  },
-  {
-    id: 2,
-    name: "Thùy Chi",
-    songNumber: 0,
-    favorite: 13,
-    image: "/image/thuy-chi.jpg",
-  },
-  {
-    id: 3,
-    name: "Hòa Minzy",
-    songNumber: 0,
-    favorite: 12,
-    image: "/image/hoa-minzy.jpg",
-  },
-  {
-    id: 4,
-    name: "Bùi Anh Tuấn",
-    songNumber: 0,
-    favorite: 9,
-    image: "/image/bui-anh-tuan.jpg",
-  },
-  {
-    id: 5,
-    name: "Bằng Kiều",
-    songNumber: 0,
-    favorite: 7,
-    image: "/image/bang-kieu.jpg",
-  },
-  {
-    id: 6,
-    name: "Hà Anh Tuấn",
-    songNumber: 0,
-    favorite: 5,
-    image: "/image/ha-anh-tuan.jpg",
-  },
-];
 
 function useScrollArrows(ref: React.RefObject<HTMLDivElement | null>) {
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -188,7 +65,13 @@ const Section = ({
   onSelectTrack,
 }: {
   title: string;
-  data: typeof Songs;
+  data: Array<{
+    id: number;
+    title: string;
+    artist: string;
+    image: string;
+    audio: string;
+  }>;
   hideInfo?: boolean;
   onSelectTrack?: (track: any, index: number) => void;
 }) => {
@@ -239,7 +122,13 @@ const SectionArtist = ({
   data,
 }: {
   title: string;
-  data: typeof fakeArtists;
+  data: Array<{
+    id: number;
+    name: string;
+    songNumber: number;
+    favorite: number;
+    image: string;
+  }>;
 }) => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const {showLeftArrow, showRightArrow, scrollSlider} =
@@ -285,35 +174,175 @@ const SectionArtist = ({
 const Home = () => {
   const [currentTrack, setCurrentTrack] = useState<any | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [recommendedSongs, setRecommendedSongs] = useState<Song[]>([]);
+  const [top100Playlists, setTop100Playlists] = useState<Album[]>([]);
+  const [favoriteArtists, setFavoriteArtists] = useState<Artist[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingTop100, setLoadingTop100] = useState(true);
+  const [loadingArtists, setLoadingArtists] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [errorTop100, setErrorTop100] = useState<string | null>(null);
+  const [errorArtists, setErrorArtists] = useState<string | null>(null);
+
+  // Fetch recommended songs from API
+  useEffect(() => {
+    const fetchRecommendedSongs = async () => {
+      try {
+        setLoading(true);
+        // console.log('Fetching recommended songs...');
+        const songs = await getRecommendedSongs(1, 20);
+        // console.log('Received songs:', songs);
+        setRecommendedSongs(songs);
+        setError(null);
+      } catch (err) {
+        // console.error('Error fetching recommended songs:', err);
+        setError('Không thể tải danh sách bài hát đề xuất');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecommendedSongs();
+  }, []);
+
+  // Fetch Top 100 playlists from API
+  useEffect(() => {
+    const fetchTop100Playlists = async () => {
+      try {
+        setLoadingTop100(true);
+        // console.log('Fetching Top 100 playlists...');
+        const playlists = await getTop100Playlists();
+        // console.log('Received Top 100 playlists:', playlists);
+        setTop100Playlists(playlists);
+        setErrorTop100(null);
+      } catch (err) {
+        // console.error('Error fetching Top 100 playlists:', err);
+        setErrorTop100('Không thể tải danh sách Top 100');
+      } finally {
+        setLoadingTop100(false);
+      }
+    };
+
+    fetchTop100Playlists();
+  }, []);
+
+  // Fetch favorite artists from API
+  useEffect(() => {
+    const fetchFavoriteArtists = async () => {
+      try {
+        setLoadingArtists(true);
+        // console.log('Fetching favorite artists...');
+        const artists = await getFavoriteArtists();
+        // console.log('Received favorite artists:', artists);
+        setFavoriteArtists(artists);
+        setErrorArtists(null);
+      } catch (err) {
+        // console.error('Error fetching favorite artists:', err);
+        setErrorArtists('Không thể tải danh sách nghệ sĩ yêu thích');
+      } finally {
+        setLoadingArtists(false);
+      }
+    };
+
+    fetchFavoriteArtists();
+  }, []);
+
   const handleSelectTrack = (track: any, index: number) => {
     setCurrentTrack(track);
     setCurrentIndex(index);
   };
+
   const handleNext = () => {
-    const nextIndex = (currentIndex + 1) % Songs.length;
+    const allSongs = [...recommendedSongs, ...top100Playlists];
+    const nextIndex = (currentIndex + 1) % allSongs.length;
     setCurrentIndex(nextIndex);
-    setCurrentTrack(Songs[nextIndex]);
+    setCurrentTrack(allSongs[nextIndex]);
   };
+
   const handlePrev = () => {
-    const prevIndex = (currentIndex - 1) % Songs.length;
+    const allSongs = [...recommendedSongs, ...top100Playlists];
+    const prevIndex = currentIndex === 0 ? allSongs.length - 1 : currentIndex - 1;
     setCurrentIndex(prevIndex);
-    setCurrentTrack(Songs[prevIndex]);
+    setCurrentTrack(allSongs[prevIndex]);
+  };
+
+  // Transform API songs to match the expected format
+  const transformApiSongs = (songs: Song[]) => {
+    return songs.map(song => ({
+      id: parseInt(song.id) || Math.random(),
+      title: song.title,
+      artist: song.artist,
+      image: song.image,
+      audio: song.song,
+    }));
+  };
+
+  // Transform API playlists to match the expected format
+  const transformApiPlaylists = (playlists: Album[]) => {
+    return playlists.map(playlist => ({
+      id: parseInt(playlist.id) || Math.random(),
+      title: playlist.title,
+      artist: playlist.artist,
+      image: playlist.image,
+      audio: '', // Playlists don't have direct audio, this will be handled by the player
+    }));
+  };
+
+  // Transform API artists to match the expected format
+  const transformApiArtists = (artists: Artist[]) => {
+    return artists.map(artist => ({
+      id: parseInt(artist.id) || Math.random(),
+      name: artist.name,
+      songNumber: artist.songsCount,
+      favorite: artist.likesCount,
+      image: artist.image,
+    }));
   };
 
   return (
     <div className="home-container">
       <Section
         title="Nghe gì hôm nay"
-        data={Songs}
+        data={loading ? [] : transformApiSongs(recommendedSongs)}
         hideInfo={true}
         onSelectTrack={handleSelectTrack}
       />
+      {loading && (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          Đang tải danh sách bài hát...
+        </div>
+      )}
+      {error && (
+        <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
+          {error}
+        </div>
+      )}
       <Section
         title="Nhạc TOP 100"
-        data={Top100}
+        data={loadingTop100 ? [] : transformApiPlaylists(top100Playlists)}
         onSelectTrack={handleSelectTrack}
       />
-      <SectionArtist title="Nghệ sĩ yêu thích" data={fakeArtists} />
+      {loadingTop100 && (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          Đang tải danh sách Top 100...
+        </div>
+      )}
+      {errorTop100 && (
+        <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
+          {errorTop100}
+        </div>
+      )}
+      <SectionArtist title="Nghệ sĩ yêu thích" data={loadingArtists ? [] : transformApiArtists(favoriteArtists)} />
+      {loadingArtists && (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          Đang tải danh sách nghệ sĩ...
+        </div>
+      )}
+      {errorArtists && (
+        <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
+          {errorArtists}
+        </div>
+      )}
       <MusicPlayerBar
         currentTrack={currentTrack}
         onNext={handleNext}

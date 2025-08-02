@@ -3,7 +3,7 @@ const STORE_NAME = "state";
 
 // NETWORK
 const NETWORK_CONFIG = {
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL + "/api/v1",
+  API_BASE_URL: (import.meta.env.VITE_API_BASE_URL || "https://music.tinasoft.io") + "/api/v1",
   TIMEOUT: 30000,
   RETRY: false,
   USE_TOKEN: true,

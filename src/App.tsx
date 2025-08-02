@@ -1,7 +1,7 @@
-import {useEffect} from "react";
+// import {useEffect} from "react";
 import Home from "@pages/Home";
-import {IRootState} from "@redux/store";
-import {useDispatch, useSelector} from "react-redux";
+// import {IRootState} from "@redux/store";
+// import {useDispatch, useSelector} from "react-redux";
 import {BrowserRouter, Outlet, Route, Routes} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,10 +9,10 @@ import NotFound from "./components/NotFound/clientNotFound.tsx";
 import HomeLayout from "./layout/user/HomeLayout.tsx";
 import "./styles/global.scss";
 import "./styles/style.scss";
-import updateUserInfo from "@redux/slices/UserSlice";
+// import updateUserInfo from "@redux/slices/UserSlice";
 // import {updateUserInfo} from "@redux/slices/UserSlice";
-import ApiAuth from "@api/ApiAuth";
-import {useQueryClient} from "@tanstack/react-query";
+// import ApiAuth from "@api/ApiAuth";
+// import {useQueryClient} from "@tanstack/react-query";
 function App() {
   // const dispatch = useDispatch();
   // const {accessToken} = useSelector(
